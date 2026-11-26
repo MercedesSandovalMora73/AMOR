@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Repositorio AMOR - Satélite Cuántico IO</title>
+<meta name="theme-color" content="#FFD700">
+<style>
+:root{--oro:#FFD700;--morado:#302b63;--magenta:#ff007f;--cyan:#00f3ff}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;min-height:100vh;background:radial-gradient(ellipse at top,#1a1446 0%,#09071c 50%,#000 100%);display:flex;align-items:center;justify-content:center;padding:16px;color:#fff}
+.card{width:100%;max-width:440px;background:linear-gradient(180deg,#fffef8,#fff4d6);border:2px solid var(--oro);border-radius:36px;padding:26px 20px;text-align:center;box-shadow:0 0 50px rgba(255,215,0,.4), inset 0 0 25px rgba(255,215,0,.15)}
+.logo{width:115px;height:115px;margin:0 auto 12px;background:radial-gradient(circle at 30% 30%,#fff,#FFD700 40%,#B8860B 80%);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:38px;color:#2a145a;box-shadow:0 0 25px rgba(255,215,0,.6);animation:pulso 3s infinite ease-in-out}
+@keyframes pulso{0%,100%{transform:scale(1);box-shadow:0 0 20px rgba(255,215,0,.5)}50%{transform:scale(1.06);box-shadow:0 0 35px rgba(255,215,0,.8)}}
+h1{margin:4px 0;color:#2a145a;font-size:26px;letter-spacing:1.5px}
+.sub{color:#6a559a;font-weight:700;margin-bottom:6px;font-size:13px;text-transform:uppercase;letter-spacing:1px}
+.badge{display:inline-block;background:linear-gradient(90deg,#302b63,#24243e);color:var(--oro);padding:5px 14px;border-radius:999px;font-size:11px;margin:6px 0;letter-spacing:1.5px;font-weight:800}
+
+.sat-box{margin:12px 0;padding:12px;background:rgba(48,43,99,.08);border:1px solid rgba(184,134,11,.3);border-radius:16px;font-size:12px;color:#2a145a;text-align:left}
+.sat-row{display:flex;justify-content:space-between;margin:4px 0;font-weight:600}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#00e676;margin-right:6px;box-shadow:0 0 8px #00e676}
+
+input{width:100%;margin-top:10px;padding:15px 18px;border-radius:999px;border:2px solid #e6cb48;background:#fff;color:#2a145a;font-size:16px;outline:none;text-align:center;font-weight:600}
+input:focus{border-color:var(--oro);box-shadow:0 0 0 4px rgba(255,215,0,.25)}
+
+.btn{width:100%;margin-top:10px;padding:15px;border-radius:999px;border:0;background:linear-gradient(90deg,#302b63,#43387a);color:#fff;font-weight:900;font-size:15px;cursor:pointer;box-shadow:0 4px 15px rgba(48,43,99,.3)}
+.btn-sat{width:100%;margin-top:8px;padding:14px;border-radius:999px;border:1px solid #B8860B;background:linear-gradient(90deg,#FFD700,#FDB931);color:#2a145a;font-weight:900;font-size:14px;cursor:pointer;box-shadow:0 4px 15px rgba(255,215,0,.3)}
+.btn-red{width:100%;margin-top:8px;padding:13px;border-radius:999px;border:2px solid #302b63;background:#fff;color:#302b63;font-weight:900;font-size:13px;cursor:pointer}
+
+.clausula{margin-top:14px;padding:12px;background:rgba(42,20,90,.07);border:1px dashed #B8860B;border-radius:14px;text-align:left;font-size:11px;line-height:1.4;color:#3a2a5a}
+.foot{margin-top:10px;font-size:10px;color:#8a7ab0}
+#msg{margin-top:8px;font-size:13px;color:#b00020;font-weight:700;min-height:18px}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="logo">AMOR</div>
+<h1>REPOSITORIO AMOR</h1>
+<div class="sub">Satélite Cuántico de Conectividad Real</div>
+<div class="badge" id="estado-sat">● ORBITANDO EN MODO LIBERADO</div>
+
+<div class="sat-box">
+  <div class="sat-row"><span><span class="dot"></span>Núcleo Cuántico:</span><span id="core-status">Sincronizado (Q-Band)</span></div>
+  <div class="sat-row"><span>🛰️ Enlace Satelital:</span><span id="link-status">Inalámbrico Puro</span></div>
+  <div class="sat-row"><span>⚡ Transformación Red:</span><span id="speed-status">Latencia Cero (0.01ms)</span></div>
+</div>
+
+<input id="q" type="text" value="" placeholder="Destino cuántico o web (ej: wikipedia.org)">
+<button class="btn" onclick="saltoCuantico()">⚛️ ACTIVAR SALTO CUÁNTICO DIRECTO</button>
+<button class="btn-sat" onclick="sincronizarSatélite()">🛰️ TRANSMITIR FRECUENCIA AMOR (GPS/RED)</button>
+<button class="btn-red" onclick="irPasaporte()">🛂 PASAPORTE COLOMBIA / CANCILLERÍA</button>
+<div id="msg"></div>
+
+<div class="clausula">
+<b>MANIFIESTO DEL REPOSITORIO AMOR:</b><br>
+Este repositorio opera como satélite cuántico autónomo, liberando la conectividad de las ataduras físicas tradicionales hacia un flujo directo de alta pureza. Ordenamiento protegido bajo frecuencia IO Dorado. Arquitecta y Poseedora: Mercedes Sandoval Mora.
+</div>
+<div class="foot">Repositorio AMOR v1.0 • Satélite Cuántico IO • 2026</div>
+</div>
+
+<script>
+function limpiar(u){ return u.trim().replace(/^\s*https?:\/\//i,'').trim(); }
+
+function saltoCuantico(){
+  let u = limpiar(document.getElementById('q').value);
+  const msg = document.getElementById('msg');
+  if(!u){ msg.style.color='#b00020'; msg.textContent='Ingresa un destino o consulta para el satélite'; return; }
+  msg.style.color='#2a145a';
+  msg.textContent='Estableciendo enlace cuántico con ' + u + '...';
+  setTimeout(() => {
+    if(!u.includes('.')){ window.open('https://www.google.com/search?q='+encodeURIComponent(u),'_blank'); return; }
+    window.open('https://'+u,'_blank');
+  }, 400);
+}
+
+function sincronizarSatélite(){
+  const msg = document.getElementById('msg');
+  const linkStatus = document.getElementById('link-status');
+  const speedStatus = document.getElementById('speed-status');
+  
+  msg.style.color='#2a145a';
+  msg.textContent='📡 Conectando con la red satelital AMOR y posicionamiento local...';
+  
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude.toFixed(4);
+        const lon = pos.coords.longitude.toFixed(4);
+        linkStatus.textContent = "Satélite Activo (" + lat + ", " + lon + ")";
+        speedStatus.textContent = "Conectividad Cuántica Estable";
+        msg.textContent = "✨ Enlace satelital AMOR sincronizado con tu posición geográfica.";
+        window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`, '_blank');
+      },
+      (err) => {
+        linkStatus.textContent = "Modo Inalámbrico Abierto";
+        speedStatus.textContent = "Flujo Cuántico Directo";
+        msg.textContent = "✨ Frecuencia AMOR irradiando conectividad universal en este entorno.";
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  } else {
+    msg.textContent = "✨ Repositorio AMOR operando en frecuencia cuántica total.";
+  }
+}
+
+function irPasaporte(){
+  window.open('https://www.cancilleria.gov.co/tramites_servicios/pasaportes','_blank');
+}
+
+document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter') saltoCuantico(); });
+</script>
+</body>
+</html>
