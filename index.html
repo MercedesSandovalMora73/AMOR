@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Repositorio AMOR - Satélite Cuántico IO v2.0</title>
+<meta name="theme-color" content="#FFD700">
+<style>
+  :root {
+    --oro: #FFD700;
+    --oro-oscuro: #B8860B;
+    --morado: #302b63;
+    --texto-principal: #2a145a;
+    --texto-secundario: #6a559a;
+    --card-bg: linear-gradient(180deg, #fffef8, #fff4d6);
+    --box-bg: rgba(48, 43, 99, 0.08);
+    --input-bg: #ffffff;
+  }
+
+  body.modo-nocturno {
+    --texto-principal: #fff4d6;
+    --texto-secundario: #d4c4fb;
+    --card-bg: linear-gradient(180deg, #161238, #0c0924);
+    --box-bg: rgba(255, 215, 0, 0.08);
+    --input-bg: #1e194d;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    background: radial-gradient(ellipse at top, #1a1446 0%, #09071c 50%, #000 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Fondo estelar animado */
+  #estrellas {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    background: var(--card-bg);
+    border: 2px solid var(--oro);
+    border-radius: 36px;
+    padding: 26px 20px;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.4), inset 0 0 25px rgba(255, 215, 0, 0.15);
+    transition: all 0.4s ease;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: -10px;
+  }
+
+  .btn-tema {
+    background: var(--box-bg);
+    border: 1px solid var(--oro-oscuro);
+    color: var(--texto-principal);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .btn-tema:active { transform: scale(0.95); }
+
+  .logo {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 12px;
+    background: radial-gradient(circle at 30% 30%, #fff, #FFD700 40%, #B8860B 80%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 36px;
+    color: #2a145a;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+    animation: pulso 3s infinite ease-in-out;
+  }
+
+  @keyframes pulso {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    50% { transform: scale(1.06); box-shadow: 0 0 38px rgba(255, 215, 0, 0.9); }
+  }
+
+  h1 {
+    margin: 4px 0;
+    color: var(--texto-principal);
+    font-size: 25px;
+    letter-spacing: 1.5px;
+  }
+
+  .sub {
+    color: var(--texto-secundario);
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: linear-gradient(90deg, #302b63, #24243e);
+    color: var(--oro);
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    margin: 6px 0;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+  }
+
+  .sat-box {
+    margin: 12px 0;
+    padding: 12px;
+    background: var(--box-bg);
+    border: 1px solid rgba(184, 134, 11, 0.35);
+    border-radius: 16px;
+    font-size: 12px;
+    color: var(--texto-principal);
+    text-align: left;
+  }
+
+  .sat-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    font-weight: 600;
+  }
+
+  .dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #00e676;
+    margin-right: 6px;
+    box-shadow: 0 0 8px #00e676;
+    animation: parpadeo 1.5s infinite alternate;
+  }
+
+  @keyframes parpadeo {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+  }
+
+  .input-group {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  input {
+    flex: 1;
+    padding: 14px 16px;
+    border-radius: 999px;
+    border: 2px solid #e6cb48;
+    background: var(--input-bg);
+    color: var(--texto-principal);
+    font-size: 15px;
+    outline: none;
+    text-align: center;
+    font-weight: 600;
+  }
+
+  input:focus {
+    border-color: var(--oro);
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.25);
+  }
+
+  .btn-fav {
+    padding: 0 16px;
+    border-radius: 999px;
+    border: 2px solid #e6cb48;
+    background: var(--input-bg);
+    color: #B8860B;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .btn-fav:hover { transform: scale(1.05); }
+
+  .btn, .btn-sat, .btn-red {
+    width: 100%;
+    margin-top: 9px;
+    padding: 14px;
+    border-radius: 999px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+
+  .btn:active, .btn-sat:active, .btn-red:active {
+    transform: scale(0.98);
+  }
+
+  .btn {
+    border: 0;
+    background: linear-gradient(90deg, #302b63, #43387a);
+    color: #fff;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(48, 43, 99, 0.3);
+  }
+
+  .btn-sat {
+    border: 1px solid #B8860B;
+    background: linear-gradient(90deg, #FFD700, #FDB931);
+    color: #2a145a;
+    font-size: 13.5px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  }
+
+  .btn-red {
+    border: 2px solid #302b63;
+    background: #fff;
+    color: #302b63;
+    font-size: 13px;
+  }
+
+  /* Chips de favoritos e historial */
+  .chips-container {
+    margin-top: 12px;
+    text-align: left;
+  }
+
+  .chips-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--texto-secundario);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .clear-btn {
+    background: none;
+    border: none;
+    color: #d32f2f;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .chips-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .chip {
+    background: var(--box-bg);
+    border: 1px solid rgba(184, 134, 11, 0.4);
+    color: var(--texto-principal);
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+  }
+
+  .chip:hover {
+    background: rgba(255, 215, 0, 0.25);
+  }
+
+  .clausula {
+    margin-top: 14px;
+    padding: 12px;
+    background: var(--box-bg);
+    border: 1px dashed #B8860B;
+    border-radius: 14px;
+    text-align: left;
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--texto-principal);
+  }
+
+  .foot {
+    margin-top: 10px;
+    font-size: 10px;
+    color: var(--texto-secundario);
+    font-weight: 600;
+  }
+
+  #msg {
+    margin-top: 9px;
+    font-size: 12.5px;
+    font-weight: 700;
+    min-height: 18px;
+    color: var(--texto-principal);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="estrellas"></canvas>
+
+<div class="card">
+  <div class="top-bar">
+    <button class="btn-tema" id="btnTema" title="Alternar frecuencia visual">🌙 Modo Galaxia</button>
+  </div>
+
+  <div class="logo">AMOR</div>
+  <h1>REPOSITORIO AMOR</h1>
+  <div class="sub">Satélite Cuántico de Conectividad Real</div>
+  <div class="badge" id="estado-sat">● ORBITANDO EN MODO LIBERADO</div>
+
+  <div class="sat-box">
+    <div class="sat-row"><span><span class="dot"></span>Núcleo Cuántico:</span><span id="core-status">Sincronizado (Q-Band)</span></div>
+    <div class="sat-row"><span>🛰️ Enlace Satelital:</span><span id="link-status">Inalámbrico Puro</span></div>
+    <div class="sat-row"><span>⚡ Telemetría de Red:</span><span id="speed-status">Latencia Cero (0.01ms)</span></div>
+  </div>
+
+  <div class="input-group">
+    <input id="q" type="text" placeholder="Destino cuántico o web (ej: wikipedia.org)">
+    <button class="btn-fav" id="btnGuardarFav" title="Guardar en Frecuencias Fijas">⭐</button>
+  </div>
+
+  <button class="btn" id="btnSalto">⚛️ ACTIVAR SALTO CUÁNTICO DIRECTO</button>
+  <button class="btn-sat" id="btnSatelite">🛰️ TRANSMITIR FRECUENCIA AMOR (GPS/RED)</button>
+  <button class="btn-red" id="btnPasaporte">🛂 PASAPORTE COLOMBIA / CANCILLERÍA</button>
+
+  <div id="msg"></div>
+
+  <!-- Sección de Frecuencias Guardadas e Historial -->
+  <div class="chips-container" id="seccionFavoritos" style="display:none;">
+    <div class="chips-title"><span>⭐ FRECUENCIAS FIJAS (FAVORITOS)</span></div>
+    <div class="chips-list" id="listaFavoritos"></div>
+  </div>
+
+  <div class="chips-container" id="seccionHistorial" style="display:none;">
+    <div class="chips-title">
+      <span>🕒 ÚLTIMOS SALTOS CUÁNTICOS</span>
+      <button class="clear-btn" id="btnLimpiarHistorial">Limpiar</button>
+    </div>
+    <div class="chips-list" id="listaHistorial"></div>
+  </div>
+
+  <div class="clausula">
+    <b>MANIFIESTO DEL REPOSITORIO AMOR:</b><br>
+    Este repositorio opera como satélite cuántico autónomo, liberando la conectividad de las ataduras físicas tradicionales hacia un flujo directo de alta pureza. Ordenamiento protegido bajo frecuencia IO Dorado. Arquitecta y Poseedora: Mercedes Sandoval Mora.
+  </div>
+  <div class="foot">Repositorio AMOR v2.0 • Satélite Cuántico IO • 2026</div>
+</div>
+
+<script>
+(() => {
+  // Referencias del DOM
+  const inputQ = document.getElementById('q');
+  const msg = document.getElementById('msg');
+  const linkStatus = document.getElementById('link-status');
+  const speedStatus = document.getElementById('speed-status');
+  const btnTema = document.getElementById('btnTema');
+
+  // Almacenamiento local
+  const STORAGE_KEYS = {
+    FAVS: 'amor_sat_favoritos',
+    HIST: 'amor_sat_historial',
+    TEMA: 'amor_sat_tema'
+  };
+
+  let favoritos = JSON.parse(localStorage.getItem(STORAGE_KEYS.FAVS)) || ['wikipedia.org', 'cancilleria.gov.co'];
+  let historial = JSON.parse(localStorage.getItem(STORAGE_KEYS.HIST)) || [];
+
+  // 1. Efecto de partículas estelares en el fondo
+  function iniciarEstrellas() {
+    const canvas = document.getElementById('estrellas');
+    const ctx = canvas.getContext('2d');
+    let width, height, estrellas = [];
+
+    function redimensionar() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      estrellas = Array.from({ length: 75 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        r: Math.random() * 1.6 + 0.3,
+        v: Math.random() * 0.3 + 0.05,
+        a: Math.random()
+      }));
+    }
+
+    function animar() {
+      ctx.clearRect(0, 0, width, height);
+      estrellas.forEach(e => {
+        e.y -= e.v;
+        if (e.y < 0) e.y = height;
+        ctx.beginPath();
+        ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 215, 0, ${e.a})`;
+        ctx.fill();
+      });
+      requestAnimationFrame(animar);
+    }
+
+    window.addEventListener('resize', redimensionar);
+    redimensionar();
+    animar();
+  }
+
+  // 2. Telemetría real de red del dispositivo (si el navegador lo soporta)
+  function actualizarTelemetriaRed() {
+    const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    if (conn) {
+      const tipo = conn.effectiveType ? conn.effectiveType.toUpperCase() : 'CUÁNTICA';
+      const bajada = conn.downlink ? `${conn.downlink} Mbps` : 'Óptima';
+      speedStatus.textContent = `${tipo} • ${bajada}`;
+    }
+  }
+
+  // 3. Gestión de Tema (Solar / Galaxia)
+  function aplicarTema(esNocturno) {
+    document.body.classList.toggle('modo-nocturno', esNocturno);
+    btnTema.textContent = esNocturno ? '☀️ Modo Solar' : '🌙 Modo Galaxia';
+    localStorage.setItem(STORAGE_KEYS.TEMA, esNocturno ? 'nocturno' : 'solar');
+  }
+
+  btnTema.addEventListener('click', () => {
+    const esNocturno = !document.body.classList.contains('modo-nocturno');
+    aplicarTema(esNocturno);
+  });
+
+  // 4. Utilidades de URL y Mensajes
+  function limpiarUrl(u) {
+    return u.trim().replace(/^\s*https?:\/\//i, '').trim();
+  }
+
+  function mostrarMensaje(texto, esError = false) {
+    msg.style.color = esError ? '#d32f2f' : 'var(--texto-principal)';
+    msg.textContent = texto;
+  }
+
+  function abrirEnlaceSeguro(url) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  // 5. Renderizado de Favoritos e Historial
+  function renderizarListas() {
+    const secFav = document.getElementById('seccionFavoritos');
+    const listaFav = document.getElementById('listaFavoritos');
+    const secHist = document.getElementById('seccionHistorial');
+    const listaHist = document.getElementById('listaHistorial');
+
+    // Favoritos
+    listaFav.innerHTML = '';
+    if (favoritos.length > 0) {
+      secFav.style.display = 'block';
+      favoritos.forEach(item => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.innerHTML = `<span>${item}</span> <span style="color:#d32f2f;margin-left:4px;" title="Quitar">×</span>`;
+        chip.querySelector('span:first-child').addEventListener('click', () => ejecutarSalto(item));
+        chip.querySelector('span:last-child').addEventListener('click', (e) => {
+          e.stopPropagation();
+          favoritos = favoritos.filter(f => f !== item);
+          localStorage.setItem(STORAGE_KEYS.FAVS, JSON.stringify(favoritos));
+          renderizarListas();
+        });
+        listaFav.appendChild(chip);
+      });
+    } else {
+      secFav.style.display = 'none';
+    }
+
+    // Historial
+    listaHist.innerHTML = '';
+    if (historial.length > 0) {
+      secHist.style.display = 'block';
+      historial.forEach(item => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.textContent = item;
+        chip.addEventListener('click', () => ejecutarSalto(item));
+        listaHist.appendChild(chip);
+      });
+    } else {
+      secHist.style.display = 'none';
+    }
+  }
+
+  function registrarEnHistorial(destino) {
+    historial = [destino, ...historial.filter(h => h !== destino)].slice(0, 5);
+    localStorage.setItem(STORAGE_KEYS.HIST, JSON.stringify(historial));
+    renderizarListas();
+  }
+
+  // 6. Acciones principales
+  function ejecutarSalto(valorOpcional) {
+    const raw = typeof valorOpcional === 'string' ? valorOpcional : inputQ.value;
+    const u = limpiarUrl(raw);
+
+    if (!u) {
+      mostrarMensaje('⚠️ Ingresa un destino o consulta para el satélite.', true);
+      inputQ.focus();
+      return;
+    }
+
+    inputQ.value = u;
+    registrarEnHistorial(u);
+    mostrarMensaje(`⚛️ Estableciendo enlace cuántico con ${u}...`);
+
+    setTimeout(() => {
+      if (!u.includes('.') || u.includes(' ')) {
+        abrirEnlaceSeguro(`https://www.google.com/search?q=${encodeURIComponent(u)}`);
+      } else {
+        abrirEnlaceSeguro(`https://${u}`);
+      }
+      mostrarMensaje(`✨ Salto completado hacia: ${u}`);
+    }, 350);
+  }
+
+  function sincronizarSatelite() {
+    mostrarMensaje('📡 Conectando con la red satelital AMOR y posicionamiento local...');
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(4);
+          const lon = pos.coords.longitude.toFixed(4);
+          linkStatus.textContent = `Satélite Activo (${lat}, ${lon})`;
+          speedStatus.textContent = 'Conectividad Cuántica Estable';
+          mostrarMensaje('✨ Enlace satelital AMOR sincronizado con tu posición geográfica.');
+          abrirEnlaceSeguro(`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`);
+        },
+        () => {
+          linkStatus.textContent = 'Modo Inalámbrico Abierto';
+          speedStatus.textContent = 'Flujo Cuántico Directo';
+          mostrarMensaje('✨ Frecuencia AMOR irradiando conectividad universal en este entorno.');
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    } else {
+      mostrarMensaje('✨ Repositorio AMOR operando en frecuencia cuántica total.');
+    }
+  }
+
+  // Eventos de botones
+  document.getElementById('btnSalto').addEventListener('click', () => ejecutarSalto());
+  document.getElementById('btnSatelite').addEventListener('click', sincronizarSatelite);
+  document.getElementById('btnPasaporte').addEventListener('click', () => {
+    abrirEnlaceSeguro('https://www.cancilleria.gov.co/tramites_servicios/pasaportes');
+  });
+
+  document.getElementById('btnGuardarFav').addEventListener('click', () => {
+    const u = limpiarUrl(inputQ.value);
+    if (!u) {
+      mostrarMensaje('⚠️ Escribe un destino primero para fijarlo en favoritos.', true);
+      return;
+    }
+    if (!favoritos.includes(u)) {
+      favoritos.unshift(u);
+      localStorage.setItem(STORAGE_KEYS.FAVS, JSON.stringify(favoritos));
+      renderizarListas();
+      mostrarMensaje(`⭐ "${u}" fijado en tus Frecuencias Favoritas.`);
+    } else {
+      mostrarMensaje(`ℹ️ "${u}" ya está en tus favoritos.`);
+    }
+  });
+
+  document.getElementById('btnLimpiarHistorial').addEventListener('click', () => {
+    historial = [];
+    localStorage.removeItem(STORAGE_KEYS.HIST);
+    renderizarListas();
+    mostrarMensaje('🧹 Historial de saltos limpiado.');
+  });
+
+  inputQ.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') ejecutarSalto();
+  });
+
+  // Inicialización
+  iniciarEstrellas();
+  actualizarTelemetriaRed();
+  if (localStorage.getItem(STORAGE_KEYS.TEMA) === 'nocturno') {
+    aplicarTema(true);
+  }
+  renderizarListas();
+})();
+</script>
+</body>
+</html>
